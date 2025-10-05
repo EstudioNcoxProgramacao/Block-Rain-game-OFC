@@ -1,0 +1,123 @@
+/* ===== Container Geral ===== */
+.grid {
+  display: flex;
+  flex-wrap: wrap;       /* permite que os blocos quebrem linha */
+  gap: 15px;             /* espaço entre os blocos */
+  justify-content: flex-start;
+  padding: 20px;
+  background-color: #f5f5f5;
+}
+
+/* ===== Estilo Base dos Blocos ===== */
+.card {
+  width: 180px;           /* largura fixa */
+  border-radius: 10px;    /* cantos arredondados */
+  padding: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25); /* sombra */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+/* ===== Hover Effects ===== */
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+}
+
+/* ===== Texto e Títulos ===== */
+.card h3 {
+  font-size: 1.05em;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+/* ===== Linhas de Valores ===== */
+.item {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.left {
+  font-weight: bold;
+  font-size: 0.85em;
+}
+
+.right {
+  font-weight: bold;
+  font-size: 0.85em;
+}
+
+/* ===== Cores Dinâmicas ===== */
+.yellow { color: #FFD700; }
+.green-light { color: #7CFC00; }
+
+/* ===== Gradientes de Categorias ===== */
+
+/* Commun - Branco e Cinza */
+.commun {
+  background: linear-gradient(135deg, #ffffff 60%, #d3d3d3 40%);
+  color: black;
+}
+
+/* Uncommun - Verde com Branco */
+.uncommun {
+  background: linear-gradient(135deg, #ffffff 60%, #00ff00 40%);
+  color: black;
+}
+
+/* Rare - Azul com Branco */
+.rare {
+  background: linear-gradient(135deg, #ffffff 60%, #0000ff 40%);
+  color: black;
+}
+
+/* Epic - Roxo com Branco */
+.epic {
+  background: linear-gradient(135deg, #ffffff 60%, #800080 40%);
+  color: black;
+}
+
+/* Legendary - Laranja com Branco */
+.legendary {
+  background: linear-gradient(135deg, #ffffff 60%, #ffa500 40%);
+  color: black;
+}
+
+/* Mythic - Vermelho Claro com Branco */
+.mythic {
+  background: linear-gradient(135deg, #ffffff 60%, #ff5555 40%);
+  color: black;
+}
+
+/* Blocky - Azul Escuro com Preto */
+.blocky {
+  background: linear-gradient(135deg, #00008b 60%, #000000 40%);
+  color: white;
+}
+
+/* Secret - Totalmente Preto */
+.secret {
+  background-color: #000000;
+  color: white;
+}
+
+/* Admin - Vermelho Forte com Preto */
+.admin {
+  background: linear-gradient(135deg, #ff0000 60%, #000000 40%);
+  color: white;
+}
+
+/* ===== Responsividade ===== */
+@media (max-width: 900px) {
+  .card { width: 140px; }
+}
+
+@media (max-width: 600px) {
+  .card { width: 100%; }
+}
