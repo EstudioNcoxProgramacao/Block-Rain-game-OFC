@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Block Rain | Ncox Studio — Painel Completo</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ===== Reset e base ===== */
+*{box-sizing:border-box;margin:0;padding:0}
+html, body{height:100%;font-family:'Orbitron', monospace;background:#0b0b0c;color:#fff;text-align:center;line-height:1.4;}
+body{padding:28px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+h1{margin-bottom:18px;font-size:36px;color:#00f0e0;text-shadow:0 0 12px rgba(0,240,224,0.25),0 0 30px rgba(0,150,255,0.12);}
+.button-row{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;margin-bottom:18px;}
+.big-btn{width:180px;height:180px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.04);box-shadow:0 8px 30px rgba(0,200,255,0.06),0 0 14px rgba(0,200,255,0.06);display:flex;flex-direction:column;justify-content:center;align-items:center;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease;}
+.big-btn:hover{transform:translateY(-6px) scale(1.03);box-shadow:0 14px 40px rgba(0,200,255,0.15),0 0 40px rgba(0,200,255,0.12);}
+.big-btn .emoji{font-size:52px;}
+.big-btn .label{margin-top:8px;font-size:18px;color:#001;font-weight:700;}
+.clocks{display:flex;gap:18px;justify-content:center;margin-top:18px;margin-bottom:22px;flex-wrap:wrap;}
+.clock{background:rgba(255,255,255,0.18);color:#000;padding:12px 18px;border-radius:12px;min-width:150px;font-weight:700;box-shadow:0 8px 20px rgba(0,200,255,0.06);}
+/* ===== quadro blocos ===== */
+#blockArea{display:none;max-width:1200px;margin:20px auto;background:#a2d5f2;padding:22px;border-radius:14px;box-shadow:0 12px 40px rgba(0,150,255,0.12),inset 0 -6px 30px rgba(0,0,0,0.02);text-align:left;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;}
+.card{border-radius:12px;padding:12px;box-shadow:0 6px 18px rgba(0,0,0,0.08);min-height:120px;}
+.card h3{margin:0 0 8px 0;font-size:18px;text-align:center;}
+.item{font-size:15px;margin:6px 2px;display:flex;justify-content:space-between;gap:12px;align-items:center;}
+.item .left{flex:1;color:#031;}
+.item .right{white-space:nowrap;font-weight:800;display:flex;gap:10px;align-items:center;}
+.val{color:#a57b00;font-weight:900;}
+.yellow{color:#b38f00;font-weight:900;}
+.green{color:#1a7f3a;font-weight:900;}
+.Commun{background:linear-gradient(90deg,#f5f5f5,#ffffff);color:#000;}
+.Uncommun{background:linear-gradient(90deg,#cfffdf,#ffffff);color:#000;}
+.Rare{background:linear-gradient(90deg,#bfe6ff,#ffffff);color:#000;}
+.Epic{background:linear-gradient(90deg,#f3c8ff,#ffffff);color:#000;}
+.Legendary{background:linear-gradient(90deg,#ffd9b8,#ffffff);color:#000;}
+.Mythic{background:linear-gradient(90deg,#ffbdbd,#ffffff);color:#000;}
+.Blocky{background:linear-gradient(90deg,#00173f,#000015);color:#fff;}
+.Secret{background:#000000;color:#fff;}
+.Admin{background:linear-gradient(90deg,#ff0000,#000000);color:#fff;}
+#blockArea .title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px;}
+#blockArea .title h2{margin:0;color:#002;font-size:20px;}
+.close-quad{display:inline-block;padding:8px 12px;background:linear-gradient(90deg,#ff7777,#ff3333);color:#000;font-weight:800;border-radius:8px;cursor:pointer;margin-#left:8px;}
+@media (max-width:700px){.big-btn{width:140px;height:140px}.big-btn .emoji{font-size:42px;}}
+small.note{display:block;margin-top:10px;color:rgba(0,0,0,0.6);font-weight:700;}
+/* ===== botão de pesquisa e config ===== */
+gradient(90deg,#00f0e0,#0077ff);border:none;color:#000;font-weight:800;cursor:pointer;}
+#configBtn{position:absolute;top:20px;right:20px;font-size:28px;cursor:pointer;color:#00f0e0;transition:transform .2s ease;}
+
+</style>
+</head>
+<body>
+<h1>BLOCK RAIN — Painel Completo</h1>
+</div>
+</div>
+<div class="button-row" role="navigation" aria-label="Categorias">
+<div class="big-btn" onclick="toggleBlockArea()">
+<div class="emoji">📦</div>
+<div class="label">Blocos</div>
+</div>
+<div class="big-btn" onclick="openPanel('game')">
+<div class="emoji">🎮</div>
+<div class="label">Jogo</div>
+</div>
+<div class="big-btn" onclick="openPanel('group')">
+<div class="emoji">🏗️</div>
+<div class="label">Grupo</div>
+</div>
+<div class="big-btn" onclick="openPanel('discord')">
+<div class="emoji">💬</div>
+<div class="label">Discord</div>
+</div>
+</div>
+<div class="clocks" aria-live="polite">
+<div class="clock" id="clock-br">🇧🇷 Brasília — --:--:--</div>
+<div class="clock" id="clock-us">🇺🇸 EUA (New York) — --:--:--</div>
+<div class="clock" id="clock-pt">🇵🇹 Portugal (Lisboa) — --:--:--</div>
+</div>
+
+<script>
+/* ===== relógios ===== */
+function updateAllClocks(){
+document.getElementById('clock-br').textContent='🇧🇷 Brasília — '+new Date().toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo'});
+document.getElementById('clock-us').textContent='🇺🇸 EUA (New York) — '+new Date().toLocaleTimeString('en-US',{timeZone:'America/New_York'});
+document.getElementById('clock-pt').textContent='🇵🇹 Portugal (Lisboa) — '+new Date().toLocaleTimeString('pt-PT',{timeZone:'Europe/Lisbon'});
+}
+setInterval(updateAllClocks,1000);
+updateAllClocks();
+
+/* ===== toggle quadro ===== */
+function toggleBlockArea(){
+const area=document.getElementById('blockArea');
+const shown=area.style.display==='block';
+area.style.display=shown?'none':'block';
+area.setAttribute('aria-hidden',shown?'true':'false');
+if(!shown){setTimeout(()=>{area.scrollIntoView({behavior:'smooth',block:'center'});},180);}
+}
+
+/* ===== painel interno ===== */
+function openPanel(kind){
+const panel=document.getElementById('panelArea');
+panel.innerHTML='';
+panel.style.display='block';
+panel.scrollIntoView({behavior:'smooth',block:'center'});
+if(kind==='game'){
+panel.innerHTML=`<h2>🎮 Block Rain — Indisponível</h2><p>O jogo ainda não está aberto. Em breve!</p>`;}
+else if(kind==='group'){
+panel.innerHTML=`<h2>🏗️ Grupo Roblox</h2><p><a href="https://www.roblox.com/pt/communities/35989029/Ncox-Studio#!/about" target="_blank" style="color:#00f0e0;text-decoration:none;">Visite o grupo</a></p>`;}
+else if(kind==='discord'){
+panel.innerHTML=`<h2>💬 Discord</h2><p><a href="https://discord.gg/SQAXrb6j" target="_blank" style="color:#00f0e0;text-decoration:none;">Entre no Discord</a></p>`;}
+}
+</script>
+<div id="blockArea" aria-hidden="true">
+<div class="title">
+<h2>Todos os Blocos</h2>
+<span class="close-quad" onclick="toggleBlockArea()">✖ Fechar</span>
+</div>
+<div class="grid">
+<!-- Blocos vão aqui -->
+</div>
+</div>
+<div id="panelArea" style="display:none;margin-top:20px;text-align:center;"></div>
+<small class="note">© 2025 Ncox Studio — Todos os direitos reservados</small>
+  <div class="grid">
+
+<!-- ===== Commun - Branco com cinza ===== -->
+<div class="card Commun" style="background: linear-gradient(135deg, #ffffff 60%, #cccccc 40%); color: black;">
+<h3>Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$1/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$10</span></div>
+</div>
+
+<div class="card Commun" style="background: linear-gradient(135deg, #ffffff 60%, #cccccc 40%); color: black;">
+<h3>Strong Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$2/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$15</span></div>
+</div>
+
+<div class="card Commun" style="background: linear-gradient(135deg, #ffffff 60%, #cccccc 40%); color: black;">
+<h3>Broken Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$3/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$50</span></div>
+</div>
+
+<div class="card Commun" style="background: linear-gradient(135deg, #ffffff 60%, #cccccc 40%); color: black;">
+<h3>Mud Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$5/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$100</span></div>
+</div>
+
+<div class="card Commun" style="background: linear-gradient(135deg, #ffffff 60%, #cccccc 40%); color: black;">
+<h3>Yang Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$6/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$150</span></div>
+</div>
+
+<!-- ===== Uncommun - Verde com branco ===== -->
+<div class="card Uncommun" style="background: linear-gradient(135deg, #ffffff 60%, #00cc00 40%); color: black;">
+<h3>Silver Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$12/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$250</span></div>
+</div>
+
+<div class="card Uncommun" style="background: linear-gradient(135deg, #ffffff 60%, #00cc00 40%); color: black;">
+<h3>Glass Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$15/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$300</span></div>
+</div>
+
+<div class="card Uncommun" style="background: linear-gradient(135deg, #ffffff 60%, #00cc00 40%); color: black;">
+<h3>Small Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$18/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$350</span></div>
+</div>
+
+<div class="card Uncommun" style="background: linear-gradient(135deg, #ffffff 60%, #00cc00 40%); color: black;">
+<h3>Tall Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$20/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$400</span></div>
+</div>
+
+<div class="card Uncommun" style="background: linear-gradient(135deg, #ffffff 60%, #00cc00 40%); color: black;">
+<h3>Burning Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$23/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$450</span></div>
+</div>
+
+<div class="card Uncommun" style="background: linear-gradient(135deg, #ffffff 60%, #00cc00 40%); color: black;">
+<h3>Sun Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$12/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$250</span></div>
+</div>
+</div>
+<div class="grid">
+<style>
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px; /* espaço entre os blocos */
+  justify-content: flex-start;
+}
+
+.card {
+  width: 180px;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.left {
+  font-weight: bold;
+  font-size: 0.85em;
+}
+
+.right {
+  font-weight: bold;
+  font-size: 0.85em;
+}
+
+.yellow {
+  color: #FFD700;
+}
+
+.green-light {
+  color: #7CFC00;
+}
+</style>
+
+<div class="grid">
+
+<!-- ===== Rare - Azul com branco ===== -->
+<div class="card" style="background: linear-gradient(135deg, #ffffff 60%, #0000ff 40%); color: black;">
+<h3>Golden Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$50/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$1K</span></div>
+</div>
+
+<div class="card" style="background: linear-gradient(135deg, #ffffff 60%, #0000ff 40%); color: black;">
+<h3>Tiny Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$75/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$1.5K</span></div>
+</div>
+
+<div class="card" style="background: linear-gradient(135deg, #ffffff 60%, #0000ff 40%); color: black;">
+<h3>Large Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$100/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$2.5K</span></div>
+</div>
+
+<div class="card" style="background: linear-gradient(135deg, #ffffff 60%, #0000ff 40%); color: black;">
+<h3>Obsidian Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$150/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$5K</span></div>
+</div>
+
+<div class="card" style="background: linear-gradient(135deg, #ffffff 60%, #0000ff 40%); color: black;">
+<h3>Sword Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$200/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$7.5K</span></div>
+</div>
+
+<!-- ===== Epic - Roxo com branco ===== -->
+<div class="card" style="background: linear-gradient(135deg, #ffffff 60%, #800080 40%); color: black;">
+<h3>Diamond Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$250/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$25K</span></div>
+</div>
+
+<div class="card" style="background: linear-gradient(135deg, #ffffff 60%, #800080 40%); color: black;">
+<h3>Flat Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$300/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$35K</span></div>
+</div>
+
+<div class="card" style="background: linear-gradient(135deg, #ffffff 60%, #800080 40%); color: black;">
+<h3>Night Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$375/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$50K</span></div>
+</div>
+
+<div class="card" style="background: linear-gradient(135deg, #ffffff 60%, #800080 40%); color: black;">
+<h3>Heavy Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$400/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$85K</span></div>
+</div>
+
+<div class="card" style="background: linear-gradient(135deg, #ffffff 60%, #800080 40%); color: black;">
+<h3>Light Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$850/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$250K</span></div>
+</div>
+
+<!-- ===== Legendary - Laranja com branco ===== -->
+<div class="card" style="background: linear-gradient(135deg, #ffffff 60%, #ffa500 40%); color: black;">
+<h3>Rainbow Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$1K/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$300K</span></div>
+</div>
+
+<div class="card" style="background: linear-gradient(135deg, #ffffff 60%, #ffa500 40%); color: black;">
+<h3>Love Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$1.25K/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$450K</span></div>
+</div>
+
+<div class="card" style="background: linear-gradient(135deg, #ffffff 60%, #ffa500 40%); color: black;">
+<h3>Ancestral Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$1.5K/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$600K</span></div>
+</div>
+
+<div class="card" style="background: linear-gradient(135deg, #ffffff 60%, #ffa500 40%); color: black;">
+<h3>Crystal Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$1.75K/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$750K</span></div>
+</div>
+
+<div class="card" style="background: linear-gradient(135deg, #ffffff 60%, #ffa500 40%); color: black;">
+<h3>Amber Block</h3>
+<div class="item"><span class="left">Valor</span><span class="right yellow">$2K/s</span></div>
+<div class="item"><span class="left">Preço</span><span class="right green-light">$850K</span></div>
+</div>
+
+</div>
+<!-- ===== Parte 5: Blocos restantes ===== -->
+<div class="grid">
+
+  <!-- Legendary (Laranja/Branco) -->
+  <div class="card legendary">
+    <h3>Rainbow Block</h3>
+    <div class="item">
+      <span class="left yellow">1K/s</span>
+      <span class="right green-light">$300K</span>
+    </div>
+  </div>
+
+  <div class="card legendary">
+    <h3>Love Block</h3>
+    <div class="item">
+      <span class="left yellow">1.25K/s</span>
+      <span class="right green-light">$450K</span>
+    </div>
+  </div>
+
+  <div class="card legendary">
+    <h3>Ancestral Block</h3>
+    <div class="item">
+      <span class="left yellow">1.5K/s</span>
+      <span class="right green-light">$600K</span>
+    </div>
+  </div>
+
+  <div class="card legendary">
+    <h3>Crystal Block</h3>
+    <div class="item">
+      <span class="left yellow">1.75K/s</span>
+      <span class="right green-light">$750K</span>
+    </div>
+  </div>
+
+  <div class="card legendary">
+    <h3>Amber Block</h3>
+    <div class="item">
+      <span class="left yellow">2K/s</span>
+      <span class="right green-light">$850K</span>
+    </div>
+  </div>
+
+  <!-- Mythic (Vermelho Claro/Branco) -->
+  <div class="card mythic">
+    <h3>Clock Block</h3>
+    <div class="item">
+      <span class="left yellow">3.5K/s</span>
+      <span class="right green-light">$1M</span>
+    </div>
+  </div>
+
+  <div class="card mythic">
+    <h3>Abyssal Block</h3>
+    <div class="item">
+      <span class="left yellow">5K/s</span>
+      <span class="right green-light">$1.3M</span>
+    </div>
+  </div>
+
+  <div class="card mythic">
+    <h3>Money Block</h3>
+    <div class="item">
+      <span class="left yellow">8K/s</span>
+      <span class="right green-light">$1.7M</span>
+    </div>
+  </div>
+
+  <div class="card mythic">
+    <h3>Angel Block</h3>
+    <div class="item">
+      <span class="left yellow">10.5K/s</span>
+      <span class="right green-light">$2M</span>
+    </div>
+  </div>
+
+  <div class="card mythic">
+    <h3>Eclipse Block</h3>
+    <div class="item">
+      <span class="left yellow">11.5K/s</span>
+      <span class="right green-light">$2.1M</span>
+    </div>
+  </div>
+
+  <div class="card mythic">
+    <h3>BlackHole Block</h3>
+    <div class="item">
+      <span class="left yellow">11.5K/s</span>
+      <span class="right green-light">$2.1M</span>
+    </div>
+  </div>
+
+  <!-- Blocky (Azul Escuro/Preto) -->
+  <div class="card blocky">
+    <h3>Void Block</h3>
+    <div class="item">
+      <span class="left yellow">50K/s</span>
+      <span class="right green-light">$5M</span>
+    </div>
+  </div>
+
+  <div class="card blocky">
+    <h3>Glitch Block</h3>
+    <div class="item">
+      <span class="left yellow">75K/s</span>
+      <span class="right green-light">$7.5M</span>
+    </div>
+  </div>
+
+  <!-- Secret (Totalmente Preto) -->
+  <div class="card secret">
+    <h3>Universal Block</h3>
+    <div class="item">
+      <span class="left yellow">75M/s</span>
+      <span class="right green-light">$250B</span>
+    </div>
+  </div>
+
+  <!-- Admin (Vermelho Vivo/Preto) -->
+  <div class="card admin">
+    <h3>Troll Face</h3>
+    <div class="item">
+      <span class="left yellow">350M/s</span>
+      <span class="right green-light">$250B</span>
+    </div>
+  </div>
+
+  <div class="card admin">
+    <h3>AdminCube</h3>
+    <div class="item">
+      <span class="left yellow">950M/s</span>
+      <span class="right green-light">$500B</span>
+    </div>
+  </div>
+
+  <div class="card admin">
+    <h3>Admin Lucky Block</h3>
+    <div class="item">
+      <span class="left yellow">?</span>
+      <span class="right green-light">$250B</span>
+    </div>
+  </div>
+
+</div>
+<div class="grid">
+
+  <!-- Informação de Raridade -->
+<div class="rarity-info">
+  <h2 style="color:black;">Raridades e Cores</h2>
+  <p>
+    <span style="color:black; background:gray; padding:2px 6px; border-radius:4px;">Branco/Cinza</span>: <span style="color:black;">Comum</span> <br>
+    <span style="color:black; background:blue; padding:2px 6px; border-radius:4px;">Azul/Branco</span>: <span style="color:black;">Raro</span> <br>
+    <span style="color:black; background:purple; padding:2px 6px; border-radius:4px;">Roxo/Branco</span>: <span style="color:black;">Épico</span> <br>
+    <span style="color:black; background:orange; padding:2px 6px; border-radius:4px;">Laranja/Branco</span>: <span style="color:black;">Lendário</span> <br>
+    <span style="color:black; background:red; padding:2px 6px; border-radius:4px;">Vermelho Claro/Branco</span>: <span style="color:black;">Mítico</span> <br>
+    <span style="color:black; background:darkblue; padding:2px 6px; border-radius:4px;">Azul Escuro/Preto</span>: <span style="color:black;">Blocky</span> <br>
+    <span style="color:white; background:black; padding:2px 6px; border-radius:4px;">Preto</span>: <span style="color:black;">Secret</span> <br>
+    <span style="color:black; background:red; padding:2px 6px; border-radius:4px;">Vermelho Vivo/Preto</span>: <span style="color:black;">Admin</span>
+  </p>
+</div>
